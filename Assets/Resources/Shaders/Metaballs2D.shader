@@ -17,11 +17,12 @@
             #include "UnityCG.cginc"
 
             sampler2D _MainTex;
+			int _MetaballCount;
+			float3 _MetaballData[100];
 
             float4 frag (v2f_img i) : SV_Target
             {
 				float4 col = tex2D(_MainTex, i.uv);
-				col.rgb = dot(col.rgb, float3(0.3f, 0.59f, 0.11f));
                 return col;
             }
             ENDCG

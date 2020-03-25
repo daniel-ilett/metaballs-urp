@@ -4,10 +4,10 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-public class Metaball2DRender : ScriptableRendererFeature
+public class MetaballRender2D : ScriptableRendererFeature
 {
     [System.Serializable]
-    public class Metaball2DRenderSettings
+    public class MetaballRender2DSettings
     {
         public RenderPassEvent renderPassEvent = RenderPassEvent.AfterRenderingPostProcessing;
 
@@ -21,9 +21,9 @@ public class Metaball2DRender : ScriptableRendererFeature
         public Color outlineColor = Color.black;
     }
 
-    public Metaball2DRenderSettings settings = new Metaball2DRenderSettings();
+    public MetaballRender2DSettings settings = new MetaballRender2DSettings();
 
-    class Metaball2DRenderPass : ScriptableRenderPass
+    class MetaballRender2DPass : ScriptableRenderPass
     {
         private Material material;
 
@@ -41,7 +41,7 @@ public class Metaball2DRender : ScriptableRendererFeature
             material = new Material(Shader.Find("Hidden/Metaballs2D"));
         }
 
-        public Metaball2DRenderPass(string profilerTag)
+        public MetaballRender2DPass(string profilerTag)
         {
             this.profilerTag = profilerTag;
         }
@@ -67,13 +67,13 @@ public class Metaball2DRender : ScriptableRendererFeature
         }
     }
 
-    Metaball2DRenderPass pass;
+    MetaballRender2DPass pass;
 
     public override void Create()
     {
         name = "Metaballs (2D)";
 
-        pass = new Metaball2DRenderPass("Metaballs (2D)");
+        pass = new MetaballRender2DPass("Metaballs2D");
 
         pass.outlineSize = settings.outlineSize;
         pass.innerColor = settings.innerColor;

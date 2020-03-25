@@ -55,13 +55,30 @@ public class MetaballRender2D : ScriptableRendererFeature
         {
             CommandBuffer cmd = CommandBufferPool.Get(profilerTag);
 
-            cmd.SetGlobalFloat("_OutlineSize", outlineSize);
-            cmd.SetGlobalColor("_InnerColor", innerColor);
-            cmd.SetGlobalColor("_OutlineColor", outlineColor);
+            List<Metaball2D> metaballs = MetaballSystem2D.Get();
+            List<Vector4> metaballData = new List<Vector4>(metaballs.Count);
 
-            cmd.Blit(source, source, material);
+            for(int i = 0; i < metaballs.Count; ++i)
+            {
+                Vector2 pos = metaballs[i].transform.position;
+                float radius = metaballs[i].GetRadius();
+                metaballData.Add(new Vector3(pos.x, pos.y, radius));
+            }
 
-            context.ExecuteCommandBuffer(cmd);
+            if(metaballData.Count > 0)
+            {
+                cmd.SetGlobalInt("_MetaballCount", metaballs.Count);
+                cmd.SetGlobalVectorArray("_MetaballData", metaballData);
+
+                cmd.SetGlobalFloat("_OutlineSize", outlineSize);
+                cmd.SetGlobalColor("_InnerColor", innerColor);
+                cmd.SetGlobalColor("_OutlineColor", outlineColor);
+
+                cmd.Blit(source, source, material);
+
+                context.ExecuteCommandBuffer(cmd);
+            }
+            
             cmd.Clear();
             CommandBufferPool.Release(cmd);
         }

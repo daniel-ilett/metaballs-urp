@@ -23,6 +23,7 @@
             float4 frag (v2f_img i) : SV_Target
             {
 				float4 col = tex2D(_MainTex, i.uv);
+				col.rgb = 1 - col.rgb;
                 return col;
             }
             ENDCG

@@ -60,13 +60,15 @@ public class MetaballRender2D : ScriptableRendererFeature
 
             for(int i = 0; i < metaballs.Count; ++i)
             {
-                Vector2 pos = metaballs[i].transform.position;
+                //Vector2 pos = metaballs[i].transform.position;
+                Vector2 pos = renderingData.cameraData.camera.WorldToScreenPoint(metaballs[i].transform.position);
                 float radius = metaballs[i].GetRadius();
-                metaballData.Add(new Vector3(pos.x, pos.y, radius));
+                metaballData.Add(new Vector4(pos.x, pos.y, radius, 0.0f));
             }
 
             if(metaballData.Count > 0)
             {
+                cmd.SetGlobalFloat("_CameraSize", renderingData.cameraData.camera.orthographicSize);
                 cmd.SetGlobalInt("_MetaballCount", metaballs.Count);
                 cmd.SetGlobalVectorArray("_MetaballData", metaballData);
 

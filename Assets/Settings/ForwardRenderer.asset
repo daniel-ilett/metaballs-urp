@@ -49,6 +49,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settings:
     renderPassEvent: 600
-    outlineSize: 1
+    outlineSize: 0.25
     innerColor: {r: 0, g: 0.52797985, b: 1, a: 1}
     outlineColor: {r: 1, g: 1, b: 1, a: 1}

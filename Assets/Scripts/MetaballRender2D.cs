@@ -31,6 +31,8 @@ public class MetaballRender2D : ScriptableRendererFeature
         public Color innerColor;
         public Color outlineColor;
 
+        private bool isFirstRender = true;
+
         private RenderTargetIdentifier source;
         private string profilerTag;
 
@@ -46,21 +48,21 @@ public class MetaballRender2D : ScriptableRendererFeature
             this.profilerTag = profilerTag;
         }
 
-        public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
-        {
-            base.Configure(cmd, cameraTextureDescriptor);
-        }
-
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
             CommandBuffer cmd = CommandBufferPool.Get(profilerTag);
+
+            if(isFirstRender)
+            {
+                isFirstRender = false;
+                cmd.SetGlobalVectorArray("_MetaballData", new Vector4[1000]);
+            }
 
             List<Metaball2D> metaballs = MetaballSystem2D.Get();
             List<Vector4> metaballData = new List<Vector4>(metaballs.Count);
 
             for(int i = 0; i < metaballs.Count; ++i)
             {
-                //Vector2 pos = metaballs[i].transform.position;
                 Vector2 pos = renderingData.cameraData.camera.WorldToScreenPoint(metaballs[i].transform.position);
                 float radius = metaballs[i].GetRadius();
                 metaballData.Add(new Vector4(pos.x, pos.y, radius, 0.0f));
@@ -68,13 +70,12 @@ public class MetaballRender2D : ScriptableRendererFeature
 
             if(metaballData.Count > 0)
             {
-                cmd.SetGlobalFloat("_CameraSize", renderingData.cameraData.camera.orthographicSize);
                 cmd.SetGlobalInt("_MetaballCount", metaballs.Count);
                 cmd.SetGlobalVectorArray("_MetaballData", metaballData);
-
                 cmd.SetGlobalFloat("_OutlineSize", outlineSize);
                 cmd.SetGlobalColor("_InnerColor", innerColor);
                 cmd.SetGlobalColor("_OutlineColor", outlineColor);
+                cmd.SetGlobalFloat("_CameraSize", renderingData.cameraData.camera.orthographicSize);
 
                 cmd.Blit(source, source, material);
 

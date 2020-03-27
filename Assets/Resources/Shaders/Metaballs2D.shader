@@ -22,6 +22,9 @@
 
 			float _CameraSize;
 
+			float4 _InnerColor;
+			float4 _OutlineColor;
+
             float4 frag (v2f_img i) : SV_Target
             {
 				float4 col = tex2D(_MainTex, i.uv);
@@ -40,7 +43,7 @@
 					// Calculate PIXEL distance.
 					//dist = min(dist, measure);
 
-					float radiusSize = _MetaballData[m].z * _ScreenParams.y * 2.0f / _CameraSize;
+					float radiusSize = _MetaballData[m].z * _ScreenParams.y / _CameraSize;
 
 					h *= saturate(measure / radiusSize);
 
@@ -52,22 +55,11 @@
 
 				//float threshold = _MetaballData[0].z * _ScreenParams.y / (_CameraSize * 2.0f);
 
-				float threshold = 0.125f;
+				float threshold = 0.5f;
 
-				col = (h > threshold) ? col : float4(0.0f, 0.0f, 0.0f, 1.0f);//((h < 0.5f) ? float4(1.0f, 0.0f, 0.0f, 1.0f) : float4(0.0f, 0.0f, 0.0f, 1.0f));
+				col = (h > threshold) ? col : ((h > threshold * 0.75f) ? _OutlineColor : _InnerColor);
 
 				return col;
-
-				/*
-				if (dist < _MetaballData[0].z * _ScreenParams.y / (_CameraSize * 2.0f))
-				{
-					return float4(0.0f, 0.0f, 0.0f, 1.0f);
-				}
-				else
-				{
-					return col;
-				}
-				*/
             }
             ENDCG
         }

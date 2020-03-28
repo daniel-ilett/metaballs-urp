@@ -6,7 +6,7 @@ A metaball simulation for Unity in Universal Render Pipeline.
 
 ## Overview
 
-This project contains a metaball simulation in 2D which uses a custom post-processing effect to render the metaballs.
+This project contains a metaball simulation in 2D which uses a custom post-processing effect to render the metaballs. The accompanying tutorial article is available on [danielilett.com](https://danielilett.com/2020-03-28-tut5-2-urp-metaballs/) - follow along on there for more background information on how this effect was created!
 
 ## Software
 
@@ -18,4 +18,4 @@ This project and the corresponding tutorial series were written by Daniel Ilett.
 
 ## Release
 
-This project has not yet released. Stay tuned for more information!
+This project was released on March 28th 2020.
